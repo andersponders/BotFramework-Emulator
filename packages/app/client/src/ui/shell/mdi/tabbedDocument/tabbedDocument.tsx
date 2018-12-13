@@ -32,43 +32,25 @@
 //
 
 import * as React from 'react';
-import * as styles from './toolbar.scss';
 
-import { filterChildren, hmrSafeNameComparison } from '@bfemulator/ui-react';
+import { TabbedDocumentContentWrapper } from './contentWrapper/contentWrapper';
 
-export default class ToolBar extends React.Component<{}, {}> {
-  render() {
-    return (
-      <div className={ styles.toolbar }>
-        <ul>
-          { filterChildren(this.props.children,
-            child => child && child.props.visible).map((child, i) => this.createClass(child, i)) }
-        </ul>
-      </div>
-    );
-  }
-
-  createClass(child: any, i: number) {
-    if (hmrSafeNameComparison(child.type, Button)) {
-      return (
-        <li key={ i } className={ styles.button }>
-          <button 
-            className={ `${ child.props.icon } ${ child.props.iconClassName || '' }` } 
-            onClick={ () => child.props.onClick() }
-          >
-            { child.props.title }
-          </button>
-        </li>
-      );
-    } else if (hmrSafeNameComparison(child.type, Separator)) {
-      return (
-        <li key={ i } className={ styles.separator }>|</li>
-      );
-    } else {
-      return false;
-    }
-  }
+export interface TabbedDocumentProps {
+  children?: any;
+  documentId?: string;
+  hidden?: boolean;
 }
 
-export const Button = props => props.children;
-export const Separator = props => props.children;
+export class TabbedDocument extends React.Component<TabbedDocumentProps> {
+  public render() {
+    const { children, documentId, hidden } = this.props;
+    return (
+      <TabbedDocumentContentWrapper
+        documentId={ documentId }
+        hidden={ hidden }
+      >
+        { children }
+      </TabbedDocumentContentWrapper>
+    );
+  }
+}

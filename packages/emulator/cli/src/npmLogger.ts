@@ -59,16 +59,14 @@ function logLevel(level: LogLevel) {
 
 export default class NpmLogger implements ILogger {
   public logActivity(conversationId: string, activity: IGenericActivity, role: string) {
-    log.verbose(shortId(conversationId), `Activity to ${ role }`, activity);
+    console.log(shortId(conversationId), `Activity to ${ role }`, activity);
   }
 
   public logMessage(conversationId: string, ...items: ILogItem[]) {
     items.forEach(message => {
       switch (message.type) {
         case 'text':
-          logLevel(message.payload.level)(
-            shortId(conversationId),
-            message.payload.text
+          console.log(message.payload.text
           );
           break;
 
@@ -79,6 +77,6 @@ export default class NpmLogger implements ILogger {
   }
 
   public logException(conversationId: string, err: Error) {
-    log.error(shortId(conversationId), err.message);
+    console.error(shortId(conversationId), err.message);
   }
 }

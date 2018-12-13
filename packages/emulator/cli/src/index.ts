@@ -54,9 +54,9 @@ program
   .option('-P, --app-password <password>', 'Microsoft Application Password, will override environment ' +
     '"MICROSOFT_APP_PASSWORD"')
   .option('-s, --service-url <url>', 'URL for the bot to callback', 'http://localhost:5000')
-  .option('-u, --bot-url <url>', 'URL to connect to bot', 'http://localhost:3978/api/messages/')
+  .option('-u, --bot-url <url>', 'URL to connect to bot', 'http://localhost:3978/api/messages')
   .option('--bot-id <id>', 'bot ID', 'bot-1')
-  .option('--use-10-tokens', 'use version 1.0 authentication tokens', false)
+  .option('--use-10-tokens', 'use version 1.0 authentication tokens', true)
   .option('-f, --file <bots.json>', 'read endpoints from file')
   .on('--help', () => {
     console.log();
@@ -103,6 +103,12 @@ async function main() {
       loggerOrLogService: new NpmLogger()
     }
   );
+
+  if (!bot.facilities.users.users || !bot.facilities.users.users['default-user']) {
+    bot.facilities.users.users = {
+      'default-user': {id: 'default-user', name: 'Default User'}
+    }
+  }
 
   if (program.file) {
     const botsJSON = await new Promise<string>((resolve, reject) => {
